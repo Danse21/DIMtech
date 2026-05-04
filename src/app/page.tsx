@@ -62,7 +62,10 @@ export default function Home() {
   }
 
   async function handleSearch() {
-    if (!origin || !dest) return;
+    if (!origin || !dest) {
+      setError("välj en station från listan först.");
+      return;
+    }
     setSearching(true);
     setError(null);
     setTrips(null);
@@ -155,7 +158,7 @@ export default function Home() {
 
           <button
             onClick={handleSearch}
-            disabled={!origin || !dest || searching}
+            disabled={searching}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-2xl transition-colors flex items-center justify-center gap-2"
           >
             {searching ? (
