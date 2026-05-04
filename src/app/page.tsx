@@ -16,6 +16,13 @@ function getNowDateTime() {
 }
 
 export default function Home() {
+
+  function calculateAveragePrice(trips: any[]) {
+    const prices = trips.map(() => Math.floor(Math.random() * 300) + 100);
+
+    const sum = prices.reduce((a, b) => a + b, 0);
+    return Math.round(sum / prices.length);
+  }
   const { t } = useI18n();
   const [origin, setOrigin] = useState<Stop | null>(null);
   const [dest, setDest] = useState<Stop | null>(null);
@@ -77,7 +84,19 @@ export default function Home() {
       );
       if (!res.ok) throw new Error("Search failed");
       const data: TripResponse = await res.json();
+
+      // 👇 kolla först att Trip finns
+      if (data.Trip && Array.isArray(data.Trip)) {
+        data.Trip = data.Trip.map((trip: any) => ({
+          ...trip,
+          price: Math.floor(Math.random() * 100) + 50
+        }));
+      }
+
       setTrips(data);
+
+      if (!data.Trip?.length) setError(t.noTrips);
+
       if (!data.Trip?.length) setError(t.noTrips);
     } catch {
       setError(t.noTrips);
@@ -186,6 +205,7 @@ export default function Home() {
 
         {trips?.Trip && trips.Trip.length > 0 && (
           <div className="mt-6">
+
             <TripList trips={trips.Trip} />
           </div>
         )}

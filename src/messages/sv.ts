@@ -41,6 +41,7 @@ const sv: Messages & Record<string, string> = {
   walk: "Gång",
   noSuggestions: "Inga hållplatser hittades",
   swapLocations: "Byt",
+  approx: "ca",
 };
 
 export default sv;
