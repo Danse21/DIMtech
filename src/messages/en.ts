@@ -40,6 +40,8 @@ const en: Record<string, string> = {
   noSuggestions: "No stops found",
   swapLocations: "Swap",
   approx: "approx.",
+  bookTrip: "Book full trip",
+  qrHint: "Show this QR code to scan trip details",
 } as const;
 
 export default en;
