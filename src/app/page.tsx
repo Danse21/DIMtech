@@ -16,6 +16,16 @@ function getNowDateTime() {
 }
 
 export default function Home() {
+  function calculateAveragePrice(trips: any[]) {
+    const prices = trips
+      .map((trip) => trip.fare?.totalPrice)
+      .filter((p) => typeof p === "number");
+
+    if (prices.length === 0) return null;
+
+    const sum = prices.reduce((a, b) => a + b, 0);
+    return Math.round(sum / prices.length);
+  }
   const { t } = useI18n();
   const [origin, setOrigin] = useState<Stop | null>(null);
   const [dest, setDest] = useState<Stop | null>(null);
@@ -186,6 +196,12 @@ export default function Home() {
 
         {trips?.Trip && trips.Trip.length > 0 && (
           <div className="mt-6">
+
+            {calculateAveragePrice(trips.Trip) && (
+              <div className="mb-4 text-center text-lg font-semibold text-green-600">
+                Genomsnittligt pris: {calculateAveragePrice(trips.Trip)} 220 kr
+              </div>
+            )}
             <TripList trips={trips.Trip} />
           </div>
         )}
