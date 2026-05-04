@@ -5,7 +5,7 @@ import type { Trip, Leg } from "@/types/resrobot";
 import { useI18n } from "@/context/i18n";
 import { getAllOperatorLinks } from "@/lib/operators";
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; label: string; }> = {
   MET: { bg: "bg-blue-600", text: "text-white", label: "T" },
   BUS: { bg: "bg-green-600", text: "text-white", label: "Bus" },
   TRN: { bg: "bg-red-600", text: "text-white", label: "Train" },
@@ -93,6 +93,10 @@ export function TripCard({ trip, rank }: TripCardProps) {
           </div>
 
           <div className="shrink-0 text-right">
+            <div className="text-lg font-bold text-green-600">
+              {(trip as any).price} kr
+            </div>
+
             <div className="text-sm text-gray-500">
               {numChanges === 0
                 ? t.direct
