@@ -89,7 +89,7 @@ export default function Home() {
       if (data.Trip && Array.isArray(data.Trip)) {
         data.Trip = data.Trip.map((trip: any) => ({
           ...trip,
-          price: Math.floor(Math.random() * 300) + 100
+          price: Math.floor(Math.random() * 100) + 50
         }));
       }
 
@@ -206,11 +206,6 @@ export default function Home() {
         {trips?.Trip && trips.Trip.length > 0 && (
           <div className="mt-6">
 
-            {calculateAveragePrice(trips.Trip) && (
-              <div className="mb-4 text-center text-lg font-semibold text-green-600">
-                Genomsnittligt pris: {calculateAveragePrice(trips.Trip)} kr
-              </div>
-            )}
             <TripList trips={trips.Trip} />
           </div>
         )}
