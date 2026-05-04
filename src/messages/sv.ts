@@ -42,6 +42,8 @@ const sv: Messages & Record<string, string> = {
   noSuggestions: "Inga hållplatser hittades",
   swapLocations: "Byt",
   approx: "ca",
+  bookTrip: "Boka hela resan",
+  qrHint: "Visa denna QR-kod för att skanna reseinformation",
 };
 
 export default sv;

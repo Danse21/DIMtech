@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Trip, Leg } from "@/types/resrobot";
 import { useI18n } from "@/context/i18n";
 import { getLegLinks, type TripContext } from "@/lib/operators";
+import { TripQRModal } from "./TripQRModal";
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; label: string; }> = {
   MET: { bg: "bg-blue-600", text: "text-white", label: "T" },
@@ -52,6 +53,7 @@ interface TripCardProps {
 export function TripCard({ trip, rank }: TripCardProps) {
   const { t } = useI18n();
   const [expanded, setExpanded] = useState(false);
+  const [showQR, setShowQR] = useState(false);
   const legs = normalizeLegs(trip);
   const transitLegs = legs.filter((l) => l.type !== "WALK");
   const firstLeg = legs[0];
@@ -181,8 +183,22 @@ export function TripCard({ trip, rank }: TripCardProps) {
               );
             })}
           </div>
+
+          <div className="pt-3 border-t border-gray-100">
+            <button
+              onClick={() => setShowQR(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+              </svg>
+              {t.bookTrip}
+            </button>
+          </div>
         </div>
       )}
+
+      {showQR && <TripQRModal trip={trip} onClose={() => setShowQR(false)} />}
     </div>
   );
 }
