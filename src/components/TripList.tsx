@@ -28,6 +28,13 @@ function getTransfers(trip: Trip): number {
   return Math.max(0, legs.filter((l) => l.type !== "WALK").length - 1);
 }
 
+function getDurationMins(trip: Trip): number {
+  if (!trip.duration) return 0;
+  const h = trip.duration.match(/(\d+)H/)?.[1] ?? "0";
+  const m = trip.duration.match(/(\d+)M/)?.[1] ?? "0";
+  return parseInt(h) * 60 + parseInt(m);
+}
+
 export function TripList({ trips }: TripListProps) {
   const { t } = useI18n();
   const [sort, setSort] = useState<SortKey>("departure");
@@ -35,7 +42,7 @@ export function TripList({ trips }: TripListProps) {
   const sorted = useMemo(() => {
     return [...trips].sort((a, b) => {
       if (sort === "departure") return getDepMinutes(a) - getDepMinutes(b);
-      if (sort === "duration") return parseInt(a.dur) - parseInt(b.dur);
+      if (sort === "duration") return getDurationMins(a) - getDurationMins(b);
       return getTransfers(a) - getTransfers(b);
     });
   }, [trips, sort]);

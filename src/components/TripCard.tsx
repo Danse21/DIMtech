@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Trip, Leg } from "@/types/resrobot";
 import { useI18n } from "@/context/i18n";
-import { getAllOperatorLinks } from "@/lib/operators";
+import { getLegLinks, type TripContext } from "@/lib/operators";
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; label: string; }> = {
   MET: { bg: "bg-blue-600", text: "text-white", label: "T" },
@@ -28,11 +28,19 @@ function formatTime(time: string, rtTime?: string) {
   return t.substring(0, 5);
 }
 
-function formatDuration(dur: string) {
-  const mins = parseInt(dur, 10);
-  const h = Math.floor(mins / 60);
-  const m = mins % 60;
+function parseDurationMins(iso?: string): number {
+  if (!iso) return 0;
+  const h = iso.match(/(\d+)H/)?.[1] ?? "0";
+  const m = iso.match(/(\d+)M/)?.[1] ?? "0";
+  return parseInt(h) * 60 + parseInt(m);
+}
+
+function formatDuration(iso?: string) {
+  const total = parseDurationMins(iso);
+  const h = Math.floor(total / 60);
+  const m = total % 60;
   if (h === 0) return `${m}min`;
+  if (m === 0) return `${h}h`;
   return `${h}h ${m}min`;
 }
 
@@ -53,10 +61,6 @@ export function TripCard({ trip, rank }: TripCardProps) {
   const arrTime = formatTime(lastLeg.Destination.time, lastLeg.Destination.rtTime);
   const numChanges = transitLegs.length - 1;
 
-  const operatorNames = transitLegs
-    .map((l) => l.Product?.operator ?? "")
-    .filter(Boolean);
-  const operatorLinks = getAllOperatorLinks(operatorNames);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
@@ -84,7 +88,7 @@ export function TripCard({ trip, rank }: TripCardProps) {
                   );
                 })}
               </div>
-              <div className="text-xs text-gray-400">{formatDuration(trip.dur)}</div>
+              <div className="text-xs text-gray-400">{formatDuration(trip.duration)}</div>
             </div>
             <div className="text-center shrink-0">
               <div className="text-2xl font-bold text-gray-900">{arrTime}</div>
@@ -122,6 +126,19 @@ export function TripCard({ trip, rank }: TripCardProps) {
             {legs.map((leg, i) => {
               const isWalk = leg.type === "WALK";
               const cat = isWalk ? CATEGORY_COLORS.WAK : getCategory(leg.category);
+              const operatorName = leg.Product?.[0]?.operator;
+              const legCtx: TripContext = {
+                originName: leg.Origin.name,
+                destName: leg.Destination.name,
+                originExtId: leg.Origin.extId,
+                destExtId: leg.Destination.extId,
+                date: leg.Origin.date,
+                time: leg.Origin.time.substring(0, 5),
+              };
+              const legLink = !isWalk && operatorName
+                ? getLegLinks(operatorName, legCtx)
+                : null;
+
               return (
                 <div key={i} className="flex gap-3 items-start">
                   <div className="shrink-0 flex flex-col items-center gap-1 pt-1">
@@ -146,33 +163,24 @@ export function TripCard({ trip, rank }: TripCardProps) {
                       {leg.Origin.name}
                       {leg.Origin.track && ` · ${t.platform} ${leg.Origin.track}`}
                     </div>
+                    {legLink && (
+                      <a
+                        href={legLink.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 mt-1.5 px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded-lg transition-colors"
+                      >
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        {t.buyTicket} · {legLink.label}
+                      </a>
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
-
-          {operatorLinks.length > 0 && (
-            <div className="pt-2 border-t border-gray-100">
-              <p className="text-xs text-gray-500 mb-2">{t.buyTicket}</p>
-              <div className="flex flex-wrap gap-2">
-                {operatorLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.deepLink ?? link.webUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>

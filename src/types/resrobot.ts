@@ -19,6 +19,7 @@ export interface NearbyStopsResponse {
 
 export interface LegOriginDest {
   name: string;
+  extId?: string;
   time: string;
   date: string;
   rtTime?: string;
@@ -36,7 +37,7 @@ export interface Leg {
   fgColor?: string;
   Origin: LegOriginDest;
   Destination: LegOriginDest;
-  Product?: {
+  Product?: Array<{
     name: string;
     num: string;
     catIn?: string;
@@ -45,12 +46,12 @@ export interface Leg {
     operatorCode?: string;
     operator?: string;
     operatorUrl?: string;
-  };
+  }>;
 }
 
 export interface Trip {
-  dur: string;
-  chg: string;
+  duration?: string; // ISO 8601 e.g. "PT6H39M"
+  chg?: string;
   LegList: {
     Leg: Leg | Leg[];
   };
