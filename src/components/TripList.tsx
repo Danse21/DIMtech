@@ -12,7 +12,9 @@ interface TripListProps {
 }
 
 function getDepMinutes(trip: Trip): number {
-  const legs = Array.isArray(trip.LegList.Leg) ? trip.LegList.Leg : [trip.LegList.Leg];
+  const legs = Array.isArray(trip.LegList.Leg)
+    ? trip.LegList.Leg
+    : [trip.LegList.Leg];
   const first = legs[0];
   const t = first.Origin.rtTime ?? first.Origin.time;
   const [h, m] = t.split(":").map(Number);
@@ -20,7 +22,9 @@ function getDepMinutes(trip: Trip): number {
 }
 
 function getTransfers(trip: Trip): number {
-  const legs = Array.isArray(trip.LegList.Leg) ? trip.LegList.Leg : [trip.LegList.Leg];
+  const legs = Array.isArray(trip.LegList.Leg)
+    ? trip.LegList.Leg
+    : [trip.LegList.Leg];
   return Math.max(0, legs.filter((l) => l.type !== "WALK").length - 1);
 }
 
@@ -46,7 +50,22 @@ export function TripList({ trips }: TripListProps) {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <span className="text-sm text-gray-500">{t.sortBy}:</span>
-        <div className="flex gap-1">
+
+        {/* Create a mobile dropdown for the sort keys */}
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as SortKey)}
+          className="block sm:hidden px-3 py-1.5 rounded-md border bg-white text-sm"
+        >
+          {sortOptions.map((opt) => (
+            <option key={opt.key} value={opt.key}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Create a desktop dropdown for the sort keys */}
+        <div className="hidden sm:flex gap-1">
           {sortOptions.map((opt) => (
             <button
               key={opt.key}
