@@ -5,7 +5,6 @@ import type { Stop } from "@/types/resrobot";
 import type { TripResponse } from "@/types/resrobot";
 import { StopInput } from "@/components/StopInput";
 import { TripList } from "@/components/TripList";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { useI18n } from "@/context/i18n";
 
 function getNowDateTime() {
@@ -106,17 +105,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
-      <header className="px-4 py-4 flex justify-between items-center max-w-2xl mx-auto">
-        <div className="flex items-center gap-2 text-white">
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          <span className="font-semibold text-sm tracking-wide">DIMtech</span>
-        </div>
-        <LanguageToggle />
-      </header>
-
+    <>
       <main className="px-4 pb-8 max-w-2xl mx-auto">
         <div className="text-center mb-8 pt-4">
           <h1 className="text-3xl font-bold text-white mb-2">{t.title}</h1>
@@ -210,6 +199,6 @@ export default function Home() {
           </div>
         )}
       </main>
-    </div>
+    </>
   );
 }
