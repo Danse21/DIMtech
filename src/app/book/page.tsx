@@ -72,7 +72,8 @@ function BookingContent() {
     );
   }
 
-  const ticketUrl = `/trip?data=${encodeURIComponent(raw)}`;
+  const host = window.location.hostname === "localhost" ? "http://172.20.10.9:3000" : window.location.origin;
+  const ticketUrl = `${host}/trip?data=${encodeURIComponent(raw)}`;
   const badges: TripLineBadge[] = trip.legs.map((leg) => {
     const cat = getTripCategoryStyle(leg.category ?? "MET");
     return {

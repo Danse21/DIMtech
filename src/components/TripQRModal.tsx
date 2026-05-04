@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
-import { QRCodeSVG } from "qrcode.react";
-import type { Trip, Leg } from "@/types/resrobot";
 import { useI18n } from "@/context/i18n";
+import type { Leg, Trip } from "@/types/resrobot";
+import { QRCodeSVG } from "qrcode.react";
+import { useEffect } from "react";
 
 function normalizeLegs(trip: Trip): Leg[] {
   const legs = trip.LegList.Leg;
@@ -43,8 +43,13 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
     })),
   };
 
-  const base64 = btoa(unescape(encodeURIComponent(JSON.stringify(tripSummary))));
-  const host = window.location.hostname === "localhost" ? "http://172.20.10.9:3000" : window.location.origin;
+  const base64 = btoa(
+    unescape(encodeURIComponent(JSON.stringify(tripSummary))),
+  );
+  const host =
+    window.location.hostname === "localhost"
+      ? "http://172.20.10.9:3000"
+      : window.location.origin;
   const qrData = `${host}/trip?data=${base64}`;
 
   useEffect(() => {
@@ -62,7 +67,9 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
         <div className="bg-gradient-to-br from-blue-600 to-indigo-700 px-6 py-5 text-white">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-blue-200 text-xs uppercase tracking-wide mb-1">{tripSummary.date}</p>
+              <p className="text-blue-200 text-xs uppercase tracking-wide mb-1">
+                {tripSummary.date}
+              </p>
               <h2 className="font-bold text-lg leading-tight">
                 {firstLeg.Origin.name.split(",")[0]}
                 <span className="mx-2 opacity-60">→</span>
@@ -76,8 +83,18 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
               onClick={onClose}
               className="text-white/70 hover:text-white p-1 -mt-1 -mr-1"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>
@@ -86,12 +103,7 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
         <div className="px-6 py-5 space-y-4">
           <div className="flex justify-center">
             <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-              <QRCodeSVG
-                value={qrData}
-                size={200}
-                level="M"
-                includeMargin={false}
-              />
+              <QRCodeSVG value={qrData} size={200} level="M" />
             </div>
           </div>
 
@@ -102,22 +114,25 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
                   {leg.number ?? leg.name.split(" ").pop()}
                 </span>
                 <div className="min-w-0">
-                  <span className="font-medium text-gray-900">{leg.Origin.name.split(",")[0]}</span>
+                  <span className="font-medium text-gray-900">
+                    {leg.Origin.name.split(",")[0]}
+                  </span>
                   <span className="text-gray-400 mx-1">→</span>
-                  <span className="text-gray-600">{leg.Destination.name.split(",")[0]}</span>
+                  <span className="text-gray-600">
+                    {leg.Destination.name.split(",")[0]}
+                  </span>
                   <div className="text-xs text-gray-400 mt-0.5">
                     {formatTime(leg.Origin.time, leg.Origin.rtTime)}
                     {leg.Origin.track && ` · ${t.platform} ${leg.Origin.track}`}
-                    {leg.Product?.[0]?.operator && ` · ${leg.Product[0].operator}`}
+                    {leg.Product?.[0]?.operator &&
+                      ` · ${leg.Product[0].operator}`}
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="text-center text-xs text-gray-400">
-            {t.qrHint}
-          </p>
+          <p className="text-center text-xs text-gray-400">{t.qrHint}</p>
         </div>
       </div>
     </div>
