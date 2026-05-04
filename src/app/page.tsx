@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import type { Stop, Trip, TripResponse } from "@/types/resrobot";
 import { StopInput } from "@/components/StopInput";
 import { TripList } from "@/components/TripList";
 import { useI18n } from "@/context/i18n";
+import type { Stop, Trip, TripResponse } from "@/types/resrobot";
+import { useState } from "react";
 
 function getNowDateTime() {
   const now = new Date();
@@ -32,7 +32,9 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         try {
-          const res = await fetch(`/api/nearby?lat=${coords.latitude}&lon=${coords.longitude}`);
+          const res = await fetch(
+            `/api/nearby?lat=${coords.latitude}&lon=${coords.longitude}`,
+          );
           const stops: Stop[] = await res.json();
           if (stops.length > 0) {
             setOrigin(stops[0]);
@@ -48,7 +50,7 @@ export default function Home() {
       () => {
         setError(t.locationError);
         setLocating(false);
-      }
+      },
     );
   }
 
@@ -71,7 +73,7 @@ export default function Home() {
     const { date, time } = getNowDateTime();
     try {
       const res = await fetch(
-        `/api/trips?originId=${origin.extId}&destId=${dest.extId}&date=${date}&time=${time}`
+        `/api/trips?originId=${origin.extId}&destId=${dest.extId}&date=${date}&time=${time}`,
       );
       if (!res.ok) throw new Error("Search failed");
       const data: TripResponse = await res.json();
@@ -80,7 +82,7 @@ export default function Home() {
       if (data.Trip && Array.isArray(data.Trip)) {
         data.Trip = data.Trip.map((trip: Trip) => ({
           ...trip,
-          price: Math.floor(Math.random() * 100) + 50
+          price: Math.floor(Math.random() * 100) + 50,
         }));
       }
 
@@ -112,7 +114,12 @@ export default function Home() {
               value={origin}
               onChange={setOrigin}
               icon={
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
                   <circle cx="12" cy="12" r="4" strokeWidth={2} />
                 </svg>
               }
@@ -122,9 +129,24 @@ export default function Home() {
               disabled={locating}
               className="mt-2 flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
               </svg>
               {locating ? t.locating : t.useLocation}
             </button>
@@ -137,8 +159,18 @@ export default function Home() {
               title={t.swapLocations}
               className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"
+                />
               </svg>
             </button>
             <div className="flex-1 h-px bg-gray-200" />
@@ -150,8 +182,18 @@ export default function Home() {
             value={dest}
             onChange={setDest}
             icon={
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
               </svg>
             }
           />
@@ -163,34 +205,62 @@ export default function Home() {
           >
             {searching ? (
               <>
-                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                <svg
+                  className="animate-spin w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
                 </svg>
                 {t.searching}
               </>
             ) : (
               <>
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
                 {t.search}
               </>
             )}
           </button>
 
-          {error && (
-            <p className="text-center text-red-600 text-sm">{error}</p>
-          )}
+          {error && <p className="text-center text-red-600 text-sm">{error}</p>}
         </div>
 
         {trips?.Trip && trips.Trip.length > 0 && (
           <div className="mt-6">
-
             <TripList trips={trips.Trip} />
           </div>
         )}
       </main>
+      <footer className="mt-12 py-6 text-center text-sm text-blue-200">
+        <div className="max-w-2xl mx-auto space-y-2">
+          <p>© 2026 DIMtech</p>
+          <p>Built for Hackathon.</p>
+        </div>
+      </footer>
     </>
   );
 }
