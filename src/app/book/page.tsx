@@ -3,9 +3,19 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import {
+  TripDisplayCard,
+  getTripCategoryStyle,
+  type TripDisplayLeg,
+  type TripLineBadge,
+} from "@/components/TripDisplayCard";
+import { useI18n } from "@/context/i18n";
 
 interface TripLeg {
   line: string;
+  category?: string;
+  type?: string;
+  number?: string;
   from: string;
   to: string;
   dep: string;
@@ -18,14 +28,28 @@ interface TripData {
   from: string;
   to: string;
   date: string;
+  duration?: string;
+  price?: number;
   departure: string;
   arrival: string;
   legs: TripLeg[];
 }
 
+function formatDuration(iso?: string) {
+  if (!iso) return undefined;
+  const h = iso.match(/(\d+)H/)?.[1] ?? "0";
+  const m = iso.match(/(\d+)M/)?.[1] ?? "0";
+  const hours = parseInt(h);
+  const mins = parseInt(m);
+  if (hours === 0) return `${mins}min`;
+  if (mins === 0) return `${hours}h`;
+  return `${hours}h ${mins}min`;
+}
+
 function BookingContent() {
   const params = useSearchParams();
   const router = useRouter();
+  const { t } = useI18n();
   const raw = params.get("data");
   const [confirmed, setConfirmed] = useState(false);
 
@@ -48,7 +72,32 @@ function BookingContent() {
     );
   }
 
-  const ticketUrl = `http://172.20.10.9:3000/trip?data=${raw}`;
+  const ticketUrl = `/trip?data=${encodeURIComponent(raw)}`;
+  const badges: TripLineBadge[] = trip.legs.map((leg) => {
+    const cat = getTripCategoryStyle(leg.category ?? "MET");
+    return {
+      label: leg.number ?? leg.line.split(" ").pop() ?? "?",
+      bg: cat.bg,
+      text: cat.text,
+    };
+  });
+  const displayLegs: TripDisplayLeg[] = trip.legs.map((leg) => {
+    const cat = getTripCategoryStyle(leg.category ?? "MET");
+    return {
+      badge: leg.number ?? leg.line.split(" ").pop() ?? "?",
+      badgeBg: cat.bg,
+      badgeText: cat.text,
+      name: leg.line,
+      direction: `${t.towards} ${leg.to.split(",")[0]}`,
+      fromName: leg.from,
+      toName: leg.to,
+      dep: leg.dep,
+      arr: leg.arr,
+      platform: leg.platform,
+      platformLabel: t.platform,
+      operator: leg.operator,
+    };
+  });
 
   if (confirmed) {
     return (
@@ -122,57 +171,24 @@ function BookingContent() {
           Back
         </button>
 
-        {/* Summary card — matches main page TripCard header */}
-        <div className="bg-white rounded-2xl shadow-lg px-5 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="text-center shrink-0">
-              <div className="text-2xl font-bold text-gray-900">{trip.departure}</div>
-              <div className="text-xs text-gray-500">{trip.from.split(",")[0]}</div>
-            </div>
-            <div className="flex-1 flex flex-col items-center gap-1">
-              <div className="flex gap-1 flex-wrap justify-center">
-                {trip.legs.map((leg, i) => (
-                  <span key={i} className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                    {leg.line.split(" ").pop()}
-                  </span>
-                ))}
-              </div>
-              <div className="text-xs text-gray-400">{trip.date}</div>
-            </div>
-            <div className="text-center shrink-0">
-              <div className="text-2xl font-bold text-gray-900">{trip.arrival}</div>
-              <div className="text-xs text-gray-500">{trip.to.split(",")[0]}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Legs detail card */}
-        <div className="bg-white rounded-2xl shadow-lg px-5 py-4 space-y-3">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Journey details</p>
-          {trip.legs.map((leg, i) => (
-            <div key={i} className="flex gap-3 items-start">
-              <div className="shrink-0 flex flex-col items-center gap-1 pt-1">
-                <span className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
-                  {leg.line.split(" ").pop()}
-                </span>
-                {i < trip.legs.length - 1 && <div className="w-0.5 h-6 bg-gray-200" />}
-              </div>
-              <div className="flex-1 pb-1">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium text-gray-900">{leg.line}</span>
-                  <span className="text-gray-500 tabular-nums text-xs">{leg.dep} → {leg.arr}</span>
-                </div>
-                <div className="text-xs text-gray-500 mt-0.5">{leg.from.split(",")[0]}
-                  {leg.platform && <span className="text-gray-400"> · Platform {leg.platform}</span>}
-                </div>
-                {leg.operator && (
-                  <div className="text-xs text-gray-400 mt-0.5">{leg.operator}</div>
-                )}
-                <div className="text-xs text-gray-400 mt-1">→ {leg.to.split(",")[0]} at {leg.arr}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TripDisplayCard
+          depTime={trip.departure}
+          arrTime={trip.arrival}
+          fromName={trip.from.split(",")[0]}
+          toName={trip.to.split(",")[0]}
+          badges={badges}
+          centerMeta={formatDuration(trip.duration) ?? trip.date}
+          rightTop={
+            typeof trip.price === "number" ? (
+              <>
+                <span className="text-xs text-green-500 italic">{t.approx}</span> {trip.price} kr
+              </>
+            ) : null
+          }
+          legs={displayLegs}
+          legsTitle={t.legs}
+          expanded
+        />
 
         {/* Confirm button */}
         <button

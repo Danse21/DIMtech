@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Stop } from "@/types/resrobot";
-import type { TripResponse } from "@/types/resrobot";
+import type { Stop, Trip, TripResponse } from "@/types/resrobot";
 import { StopInput } from "@/components/StopInput";
 import { TripList } from "@/components/TripList";
 import { useI18n } from "@/context/i18n";
@@ -15,13 +14,6 @@ function getNowDateTime() {
 }
 
 export default function Home() {
-
-  function calculateAveragePrice(trips: any[]) {
-    const prices = trips.map(() => Math.floor(Math.random() * 300) + 100);
-
-    const sum = prices.reduce((a, b) => a + b, 0);
-    return Math.round(sum / prices.length);
-  }
   const { t } = useI18n();
   const [origin, setOrigin] = useState<Stop | null>(null);
   const [dest, setDest] = useState<Stop | null>(null);
@@ -86,7 +78,7 @@ export default function Home() {
 
       // 👇 kolla först att Trip finns
       if (data.Trip && Array.isArray(data.Trip)) {
-        data.Trip = data.Trip.map((trip: any) => ({
+        data.Trip = data.Trip.map((trip: Trip) => ({
           ...trip,
           price: Math.floor(Math.random() * 100) + 50
         }));

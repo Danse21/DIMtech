@@ -12,16 +12,22 @@ interface StopInputProps {
 }
 
 export function StopInput({ label, placeholder, value, onChange, icon }: StopInputProps) {
-  const [query, setQuery] = useState(value?.name ?? "");
+  const valueKey = value?.extId ?? null;
+  const [inputState, setInputState] = useState({
+    query: value?.name ?? "",
+    valueKey,
+  });
   const [suggestions, setSuggestions] = useState<Stop[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (value) setQuery(value.name);
-  }, [value]);
+  let query = inputState.query;
+  if (inputState.valueKey !== valueKey) {
+    query = value?.name ?? "";
+    setInputState({ query, valueKey });
+  }
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -32,7 +38,7 @@ export function StopInput({ label, placeholder, value, onChange, icon }: StopInp
   }, []);
 
   function handleInput(val: string) {
-    setQuery(val);
+    setInputState({ query: val, valueKey: null });
     onChange(null);
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -52,7 +58,7 @@ export function StopInput({ label, placeholder, value, onChange, icon }: StopInp
   }
 
   function select(stop: Stop) {
-    setQuery(stop.name);
+    setInputState({ query: stop.name, valueKey: stop.extId });
     onChange(stop);
     setSuggestions([]);
     setOpen(false);

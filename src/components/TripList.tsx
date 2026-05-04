@@ -91,7 +91,7 @@ export function TripList({ trips }: TripListProps) {
 
       <div className="space-y-3">
         {sorted.map((trip, i) => (
-          <TripCard key={i} trip={trip} rank={i} />
+          <TripCard key={i} trip={trip} />
         ))}
       </div>
     </div>
