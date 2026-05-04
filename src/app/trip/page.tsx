@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { useI18n } from "@/context/i18n";
 
 interface TripLeg {
   line: string;
@@ -24,12 +25,13 @@ interface TripData {
 
 function TripTicket() {
   const params = useSearchParams();
+  const { t } = useI18n();
   const raw = params.get("data");
 
   if (!raw) {
     return (
       <div className="flex items-center justify-center p-4">
-        <p className="text-gray-500">Invalid ticket link.</p>
+        <p className="text-gray-500">{t.invalidTicketLink}</p>
       </div>
     );
   }
@@ -40,14 +42,14 @@ function TripTicket() {
   } catch {
     return (
       <div className="flex items-center justify-center p-4">
-        <p className="text-red-500">Could not read ticket data.</p>
+        <p className="text-red-500">{t.couldNotReadTicketData}</p>
       </div>
     );
   }
 
   return (
     <div className="flex items-center justify-center p-4 pb-8">
-      <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
 
         <div className="bg-green-500 px-6 py-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
@@ -56,8 +58,8 @@ function TripTicket() {
             </svg>
           </div>
           <div>
-            <p className="text-white font-bold text-lg leading-none">Valid Ticket</p>
-            <p className="text-green-100 text-sm">Giltigt resedokument</p>
+            <p className="text-white font-bold text-lg leading-none">{t.validTicket}</p>
+            <p className="text-green-100 text-sm">{t.validTicketSubtitle}</p>
           </div>
         </div>
 
@@ -85,7 +87,7 @@ function TripTicket() {
         </div>
 
         <div className="px-6 py-4 space-y-3">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Journey details</p>
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t.legs}</p>
           {trip.legs.map((leg, i) => (
             <div key={i} className="flex gap-3 items-start text-sm">
               <span className="shrink-0 bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded text-xs mt-0.5">
@@ -97,7 +99,7 @@ function TripTicket() {
                 <span className="text-gray-600">{leg.to.split(",")[0]}</span>
                 <div className="text-xs text-gray-400 mt-0.5">
                   {leg.dep}
-                  {leg.platform && ` · Platform ${leg.platform}`}
+                  {leg.platform && ` · ${t.platform} ${leg.platform}`}
                   {leg.operator && ` · ${leg.operator}`}
                 </div>
               </div>
@@ -108,7 +110,7 @@ function TripTicket() {
         <div className="px-6 pb-5">
           <div className="bg-gray-50 rounded-xl px-4 py-3 text-center">
             <p className="text-xs text-gray-400">
-              This document confirms your planned journey. Purchase tickets from each operator before travel.
+              {t.ticketHint}
             </p>
           </div>
         </div>

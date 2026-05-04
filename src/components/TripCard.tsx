@@ -102,6 +102,7 @@ export function TripCard({ trip }: TripCardProps) {
       arr: formatTime(leg.Destination.time, leg.Destination.rtTime),
       platform: leg.Origin.track,
       platformLabel: t.platform,
+      arrivalLabel: t.at,
       isWalk,
       buyLink: legLink ? { label: legLink.label, url: legLink.url } : undefined,
       buyLabel: t.buyTicket,

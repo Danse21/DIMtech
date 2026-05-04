@@ -7,7 +7,7 @@ import { Header } from "@/components/Header";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sweden Travel Planner",
+  title: "Travel Planner",
   description: "Plan your journey with Swedish public transport",
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.className} min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800`}>
+      <body className={`${geist.className} min-h-screen flex flex-col bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800`}>
         <I18nProvider>
           <Header />
           {children}

@@ -2,9 +2,11 @@ import type { DisplayLeg } from "@/types/display";
 
 interface TripLegsDetailProps {
   legs: DisplayLeg[];
+  platformLabel: string;
+  arrivalLabel: string;
 }
 
-export function TripLegsDetail({ legs }: TripLegsDetailProps) {
+export function TripLegsDetail({ legs, platformLabel, arrivalLabel }: TripLegsDetailProps) {
   return (
     <div className="space-y-2">
       {legs.map((leg, i) => (
@@ -22,12 +24,12 @@ export function TripLegsDetail({ legs }: TripLegsDetailProps) {
             </div>
             <div className="text-xs text-gray-500 mt-0.5">
               {leg.fromName}
-              {leg.platform && <span className="text-gray-400"> · Platform {leg.platform}</span>}
+              {leg.platform && <span className="text-gray-400"> · {platformLabel} {leg.platform}</span>}
             </div>
             {leg.operator && !leg.isWalk && (
               <div className="text-xs text-gray-400 mt-0.5">{leg.operator}</div>
             )}
-            <div className="text-xs text-gray-400 mt-1">→ {leg.toName} at {leg.arr}</div>
+            <div className="text-xs text-gray-400 mt-1">→ {leg.toName} {arrivalLabel} {leg.arr}</div>
             {leg.buyLink && (
               <a
                 href={leg.buyLink.url}

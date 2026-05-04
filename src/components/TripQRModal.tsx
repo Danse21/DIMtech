@@ -58,7 +58,7 @@ export function TripQRModal({ trip, onClose }: TripQRModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="bg-gradient-to-br from-blue-600 to-indigo-700 px-6 py-5 text-white">
           <div className="flex justify-between items-start">
             <div>
