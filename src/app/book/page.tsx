@@ -56,7 +56,7 @@ function BookingContent() {
   if (!raw) {
     return (
       <div className="flex items-center justify-center p-4">
-        <p className="text-gray-500">Invalid booking link.</p>
+        <p className="text-gray-500">{t.invalidBookingLink}</p>
       </div>
     );
   }
@@ -67,7 +67,7 @@ function BookingContent() {
   } catch {
     return (
       <div className="flex items-center justify-center p-4">
-        <p className="text-red-500">Could not read trip data.</p>
+        <p className="text-red-500">{t.couldNotReadTripData}</p>
       </div>
     );
   }
@@ -95,6 +95,7 @@ function BookingContent() {
       arr: leg.arr,
       platform: leg.platform,
       platformLabel: t.platform,
+      arrivalLabel: t.at,
       operator: leg.operator,
     };
   });
@@ -102,7 +103,7 @@ function BookingContent() {
   if (confirmed) {
     return (
       <div className="flex items-center justify-center p-4 pb-8">
-        <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="bg-green-500 px-6 py-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -110,14 +111,14 @@ function BookingContent() {
               </svg>
             </div>
             <div>
-              <p className="text-white font-bold text-lg leading-none">Booking Confirmed</p>
-              <p className="text-green-100 text-sm">Bokning bekräftad</p>
+              <p className="text-white font-bold text-lg leading-none">{t.bookingConfirmed}</p>
+              <p className="text-green-100 text-sm">{t.bookingConfirmedSubtitle}</p>
             </div>
           </div>
 
           <div className="px-6 py-5 space-y-4">
             <div className="text-center">
-              <p className="text-sm text-gray-500 mb-3">Scan to view your ticket</p>
+              <p className="text-sm text-gray-500 mb-3">{t.scanToViewTicket}</p>
               <div className="flex justify-center">
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
                   <QRCodeSVG value={ticketUrl} size={200} level="M" includeMargin={false} />
@@ -127,19 +128,19 @@ function BookingContent() {
 
             <div className="bg-gray-50 rounded-xl px-4 py-3">
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">From</span>
+                <span className="text-gray-500">{t.from}</span>
                 <span className="font-medium text-gray-900">{trip.from.split(",")[0]}</span>
               </div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">To</span>
+                <span className="text-gray-500">{t.to}</span>
                 <span className="font-medium text-gray-900">{trip.to.split(",")[0]}</span>
               </div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">Date</span>
+                <span className="text-gray-500">{t.date}</span>
                 <span className="font-medium text-gray-900">{trip.date}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500">Time</span>
+                <span className="text-gray-500">{t.time}</span>
                 <span className="font-medium text-gray-900">{trip.departure} → {trip.arrival}</span>
               </div>
             </div>
@@ -148,7 +149,7 @@ function BookingContent() {
               onClick={() => router.push("/")}
               className="w-full py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors"
             >
-              Back to search
+              {t.backToSearch}
             </button>
           </div>
         </div>
@@ -158,7 +159,7 @@ function BookingContent() {
 
   return (
     <div className="p-4 flex flex-col items-center pb-8">
-      <div className="w-full max-w-2xl space-y-4">
+      <div className="w-full max-w-6xl space-y-4">
 
         {/* Back */}
         <button
@@ -168,7 +169,7 @@ function BookingContent() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back
+          {t.back}
         </button>
 
         <TripDisplayCard
@@ -198,7 +199,7 @@ function BookingContent() {
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
-          Confirm Booking
+          {t.confirmBooking}
         </button>
       </div>
     </div>

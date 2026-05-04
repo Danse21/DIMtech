@@ -30,7 +30,8 @@ export interface TripDisplayLeg {
   dep: string;
   arr: string;
   platform?: string;
-  platformLabel?: string;
+  platformLabel: string;
+  arrivalLabel: string;
   operator?: string;
   isWalk?: boolean;
   buyLink?: {
@@ -175,7 +176,7 @@ export function TripDisplayCard({
                     {leg.platform && (
                       <span className="text-gray-400">
                         {" · "}
-                        {leg.platformLabel ?? "Platform"} {leg.platform}
+                        {leg.platformLabel} {leg.platform}
                       </span>
                     )}
                   </div>
@@ -183,7 +184,7 @@ export function TripDisplayCard({
                     <div className="text-xs text-gray-400 mt-0.5">{leg.operator}</div>
                   )}
                   <div className="text-xs text-gray-400 mt-1">
-                    → {leg.toName} at {leg.arr}
+                    → {leg.toName} {leg.arrivalLabel} {leg.arr}
                   </div>
                   {leg.buyLink && (
                     <a

@@ -63,7 +63,7 @@ export default function Home() {
 
   async function handleSearch() {
     if (!origin || !dest) {
-      setError("välj en station från listan först.");
+      setError(t.selectStationsError);
       return;
     }
     setSearching(true);
@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <>
-      <main className="px-4 pb-8 max-w-2xl mx-auto">
+      <main className="flex-1 px-4 pb-8 max-w-6xl mx-auto w-full">
         <div className="text-center mb-8 pt-4">
           <h1 className="text-3xl font-bold text-white mb-2">{t.title}</h1>
           <p className="text-blue-200">{t.subtitle}</p>
@@ -256,9 +256,9 @@ export default function Home() {
         )}
       </main>
       <footer className="mt-12 py-6 text-center text-sm text-blue-200">
-        <div className="max-w-2xl mx-auto space-y-2">
+        <div className="max-w-6xl mx-auto space-y-2">
           <p>© 2026 DIMtech</p>
-          <p>Built for Hackathon.</p>
+          <p>{t.builtForHackathon}</p>
         </div>
       </footer>
     </>

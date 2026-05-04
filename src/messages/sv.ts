@@ -1,7 +1,7 @@
 import type { Messages } from "./en";
 
 const sv: Messages & Record<string, string> = {
-  title: "Sverige Reseplanerare",
+  title: "Reseplanerare",
   subtitle: "Planera din resa med kollektivtrafik",
   from: "Från",
   to: "Till",
@@ -22,10 +22,12 @@ const sv: Messages & Record<string, string> = {
   transfer: "byte",
   direct: "Direktresa",
   noTrips: "Inga resor hittades. Prova en annan tid eller rutt.",
+  selectStationsError: "Välj stationer från listan först.",
   buyTicket: "Köp biljett",
   openInApp: "Öppna i app",
   legs: "Resdetaljer",
   platform: "Spår",
+  at: "kl.",
   towards: "mot",
   minutes: "min",
   hours: "t",
@@ -44,6 +46,22 @@ const sv: Messages & Record<string, string> = {
   approx: "ca",
   bookTrip: "Boka hela resan",
   qrHint: "Visa denna QR-kod för att skanna reseinformation",
+  builtForHackathon: "Byggd för hackathon.",
+  invalidBookingLink: "Ogiltig bokningslänk.",
+  couldNotReadTripData: "Kunde inte läsa resinformationen.",
+  bookingConfirmed: "Bokning bekräftad",
+  bookingConfirmedSubtitle: "Din biljett är redo",
+  scanToViewTicket: "Skanna för att visa din biljett",
+  date: "Datum",
+  time: "Tid",
+  backToSearch: "Tillbaka till sökningen",
+  back: "Tillbaka",
+  confirmBooking: "Bekräfta bokning",
+  invalidTicketLink: "Ogiltig biljettlänk.",
+  couldNotReadTicketData: "Kunde inte läsa biljettinformationen.",
+  validTicket: "Giltig biljett",
+  validTicketSubtitle: "Resedokument",
+  ticketHint: "Detta dokument bekräftar din planerade resa. Köp biljetter från varje operatör före avresa.",
 };
 
 export default sv;
