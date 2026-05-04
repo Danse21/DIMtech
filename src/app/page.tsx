@@ -84,7 +84,19 @@ export default function Home() {
       );
       if (!res.ok) throw new Error("Search failed");
       const data: TripResponse = await res.json();
+
+      // 👇 kolla först att Trip finns
+      if (data.Trip && Array.isArray(data.Trip)) {
+        data.Trip = data.Trip.map((trip: any) => ({
+          ...trip,
+          price: Math.floor(Math.random() * 300) + 100
+        }));
+      }
+
       setTrips(data);
+
+      if (!data.Trip?.length) setError(t.noTrips);
+
       if (!data.Trip?.length) setError(t.noTrips);
     } catch {
       setError(t.noTrips);
