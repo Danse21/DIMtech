@@ -210,6 +210,12 @@ export default function Home() {
           </div>
         )}
       </main>
+      <footer className="mt-12 py-6 text-center text-sm text-blue-200">
+        <div className="max-w-2xl mx-auto space-y-2">
+          <p>© 2026 DIMtech</p>
+          <p>Built for Hackathon.</p>
+        </div>
+      </footer>
     </div>
   );
 }
