@@ -39,6 +39,7 @@ const en: Record<string, string> = {
   walk: "Walk",
   noSuggestions: "No stops found",
   swapLocations: "Swap",
+  approx: "approx.",
 } as const;
 
 export default en;
