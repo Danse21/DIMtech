@@ -52,6 +52,7 @@ export interface Leg {
 export interface Trip {
   duration?: string; // ISO 8601 e.g. "PT6H39M"
   chg?: string;
+  price?: number;
   LegList: {
     Leg: Leg | Leg[];
   };

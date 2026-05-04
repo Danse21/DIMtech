@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/context/i18n";
+import { Header } from "@/components/Header";
 
 const geist = Geist({ subsets: ["latin"] });
 
@@ -17,8 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.className} bg-gray-50 min-h-screen`}>
-        <I18nProvider>{children}</I18nProvider>
+      <body className={`${geist.className} min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800`}>
+        <I18nProvider>
+          <Header />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );
