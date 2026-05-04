@@ -94,6 +94,9 @@ export function TripCard({ trip, rank }: TripCardProps) {
 
           <div className="shrink-0 text-right">
             <div className="text-lg font-bold text-green-600">
+              <span className="text-xs text-darker-green-400 italic">
+                {t.approx}
+              </span>{" "}
               {(trip as any).price} kr
             </div>
 
